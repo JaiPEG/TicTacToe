@@ -84,4 +84,5 @@ end
 @testset "TicTacToe" begin
 	# Under optimal play, there should be a tie
 	@test minimax(root) == 0
+	@test minimaxMoves(root)[1] == 0
 end
