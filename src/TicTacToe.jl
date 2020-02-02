@@ -224,13 +224,11 @@ function showBoard(board::Board)::String
 			return " "
 		end
 	end
-	for i in 1:3
-		for j in 1:3
-			p = (i - 1)*3 + j
-			ret = string(ret, showPos(p))
-		end
-		ret = string(ret, "\n")
-	end
+	return unSplit([
+		unSplit(map(showPos, [1, 2, 3]), '|'),
+		unSplit(map(showPos, [4, 5, 6]), '|'),
+		unSplit(map(showPos, [7, 8, 9]), '|'),
+	], '\n')
 	return ret
 end
 
@@ -243,8 +241,9 @@ function showState(state::State)::String
 			return "O"
 		end
 	end
-	return string(showBoard(state.board),
-		"Player: ", showPlayer(state.player), "\n")
+	return string(
+		showBoard(state.board), "\n",
+		"Player ", showPlayer(state.player), "'s turn.")
 end
 
 end # module
