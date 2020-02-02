@@ -47,7 +47,7 @@ end
 # The array returned has the minimum length of given arrays.
 function zipWith(f, xs::Array{A}, ys::Array{B})::Array{C} where A where B where C
 	ret = []
-	for i in 1:min(length(xs), length(ys))
+	for i in 1:min([length(xs), length(ys)])
 		ret = append(ret, f(xs[i], ys[i]))
 	end
 	return ret
