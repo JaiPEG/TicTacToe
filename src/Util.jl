@@ -20,7 +20,7 @@ end
 
 # Combine elements unambiguously using associative operation f.
 # If the array is empty, throw a DomainError.
-function fold1(f, xs::Array{A})::B where A where B
+function fold1(f, xs::Array{A}) where A
 	if length(xs) == 0
 		throw(DomainError(xs, "List must be nonempty."))
 	elseif length(xs) == 1
@@ -45,7 +45,7 @@ end
 # Create a new array whose elements are given by applying binary function to the
 # elements of the two given arrays.
 # The array returned has the minimum length of given arrays.
-function zipWith(f, xs::Array{A}, ys::Array{B})::Array{C} where A where B where C
+function zipWith(f, xs::Array{A}, ys::Array{B}) where A where B
 	ret = []
 	for i in 1:min([length(xs), length(ys)])
 		ret = append(ret, f(xs[i], ys[i]))
