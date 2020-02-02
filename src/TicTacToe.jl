@@ -2,41 +2,47 @@ module TicTacToe
 
 include("Util.jl")
 
-export None, X, O
-# Players include {X, O}
-# PositionStates include {None, X, O}
-None = 0
-X = 1
-O = 2
+export Player, X, O
+# The players of tic-tac-toe
+@enum Player begin
+	X
+	O
+end
 
-# Board is a list of 9 PositionStates
-# Starting from the top-left, going right and then down
+export PositionState
+# The state of a particular position on the board
+const PositionState = Union{Player, Nothing}
+
+export Board
+# Must be an array of length 9
+# Starts at the top-left and goes across the rows
+const Board = Array{PositionState}
 
 export State
-# State for a game
-struct State{T}
-	board::Array{T}
-	player
+# State of a tic-tac-toe game
+struct State
+	board::Board
+	player::Player
 end
 
 export Move
 # Represents a move in a game.
 # Unique identifier of a child state of a given state.
 struct Move
-	position
-	player
+	position::Int
+	player::Player
 end
 
 export root
 # Initial state
 # The root node of game state tree.
 # Board is empty, X goes first.
-root = State(repeat([None], 9), X)
+root = State(replicate(nothing, 9), X)
 
 export full
 # Test if the board is full.
-function full(board)::Bool
-	occupied(p) = board[p] != None
+function full(board::Board)::Bool
+	occupied(p) = board[p] != nothing
 	return all(occupied, [1,2,3,4,5,6,7,8,9])
 end
 
@@ -46,7 +52,7 @@ export wins
 # turn it is is the LOSING player.
 # E.g.: If wins(board, X) == true, then the current state is actually
 # (board, O)
-function wins(board, player)
+function wins(board::Board, player::Player)::Bool
 	tl = board[1] == player
 	tc = board[2] == player
 	tr = board[3] == player
@@ -64,16 +70,16 @@ end
 
 export terminal
 # Test if the state is a terminal state.
-function terminal(state)::Bool
-	return utility(state) != Nothing
+function terminal(state::State)::Bool
+	return utility(state) != nothing
 end
 
 export utility
 # Get the utility (score) of the terminal state.
-# If state is not a terminal state, return Nothing.
+# If state is not a terminal state, return nothing.
 # X is the maximizing player.
 # TODO: throw exception.
-function utility(state)
+function utility(state::State)
 	# The reason why we take in a state and not just a board, is
 	# because, in principle, the utility function really should know
 	# about the whole state. However, for simplicity, ignore the player
@@ -87,14 +93,14 @@ function utility(state)
 	elseif full(state.board)
 		return 0
 	else
-		return Nothing
+		return nothing
 	end
 end
 
 export nextPlayer
 # Return the next player given the current player.
 # If not given a valid player, throw DomainError
-function nextPlayer(player)
+function nextPlayer(player::Player)::Player
 	if player == X
 		return O
 	elseif player == O
@@ -112,7 +118,7 @@ export join
 function join(state::State, move::Move)::State
 	if move.player != state.player
 		throw(DomainError(move, "Move must be played by current player."))
-	elseif state.board[move.position] != None
+	elseif state.board[move.position] != nothing
 		throw(DomainError(move, "Move must be played on an empty square."))
 	else
 		nextBoard = modify(state.board, move.position, move.player)
@@ -127,9 +133,9 @@ export childrenMoves
 # These are unique identifiers for the children of a node in such a DAG.
 #
 # See also: children.
-function childrenMoves(state)
+function childrenMoves(state::State)::Array{Move}
 	boardF(pos) = state.board[pos]
-	nextPositions = fiber(boardF, [1,2,3,4,5,6,7,8,9], None)
+	nextPositions = fiber(boardF, [1,2,3,4,5,6,7,8,9], nothing)
 	nextMoves = map(pos -> Move(pos, state.player),
 		nextPositions)
 	return nextMoves
@@ -141,7 +147,7 @@ export children
 # These are the children of a node in such a DAG.
 #
 # See also: childrenMoves.
-function children(state)
+function children(state::State)::Array{State}
 	nextMoves = childrenMoves(state)
 	# Assuming moves are valid, join should never fail.
 	return map(move -> join(state, move), nextMoves)
@@ -157,7 +163,7 @@ export minimax
 function minimax(state::State)::Real
 	u = utility(state)
 	# If terminal state
-	if u != Nothing
+	if u != nothing
 		return u
 	else
 		# X is the maximizing player
@@ -181,7 +187,7 @@ export minimaxMoves
 function minimaxMoves(state::State)::Tuple{Real, Array{Move}}
 	u = utility(state)
 	# If terminal state
-	if u != Nothing
+	if u != nothing
 		return (u, [])
 	else
 		nextMoves = childrenMoves(state)
@@ -207,7 +213,7 @@ function minimaxMoves(state::State)::Tuple{Real, Array{Move}}
 end
 
 export showBoard
-function showBoard(board)
+function showBoard(board::Board)::String
 	ret = ""
 	function showPos(p)
 		if board[p] == X
@@ -229,7 +235,7 @@ function showBoard(board)
 end
 
 export showState
-function showState(state)
+function showState(state::State)::String
 	function showPlayer(player)
 		if player == X
 			return "X"
