@@ -85,4 +85,5 @@ end
 	# Under optimal play, there should be a tie
 	@test minimax(root) == 0
 	@test minimaxMoves(root)[1] == 0
+	@test full(fold(TicTacToe.join, root, minimaxMoves(root)[2]).board)
 end
