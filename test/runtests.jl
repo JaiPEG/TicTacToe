@@ -71,9 +71,9 @@ using TicTacToe
 	@test concat([[1, 2, 3], [4, 5, 6]]) == [1, 2, 3, 4, 5, 6]
 	@test concat([]::Array{String}) == ""
 	@test concat(["abc", "def"]) == "abcdef"
-	@test unSplit([], 7) == [7]
+	@test_throws DomainError unSplit([], 7)
 	@test unSplit([[1, 2, 3], [4, 5, 6]], 7) == [1, 2, 3, 7, 4, 5, 6]
-	@test unSplit([], '.') == "."
+	@test_throws DomainError unSplit([], '.')
 	@test unSplit(["abc", "def"], '.') == "abc.def"
 end
 

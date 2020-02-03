@@ -171,9 +171,10 @@ function concat(xs::Array{String})::String
 end
 
 # Combine array of arrays by interspersing an element in between.
+# Throw DomainError if array is empty.
 function unSplit(xs::Array{Array{T}}, c::T)::Array{T} where T
 	if length(xs) == 0
-		return []
+		throw(DomainError(xs, "Empty array."))
 	else
 		ret = xs[1]
 		for x in xs[2:end]
@@ -185,9 +186,10 @@ function unSplit(xs::Array{Array{T}}, c::T)::Array{T} where T
 end
 
 # Combine array of strings by interspersing a char in between.
+# Throw DomainError if array is empty.
 function unSplit(xs::Array{String}, c::Char)::String
 	if length(xs) == 0
-		return []
+		throw(DomainError(xs, "Empty array."))
 	else
 		ret = xs[1]
 		for x in xs[2:end]
