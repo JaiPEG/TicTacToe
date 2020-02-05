@@ -241,9 +241,10 @@ function showState(state::State)::String
 			return "O"
 		end
 	end
-	return string(
+	return concat([
 		showBoard(state.board), "\n",
-		"Player ", showPlayer(state.player), "'s turn.")
+		"Player ", showPlayer(state.player), "'s turn."
+	])
 end
 
 end # module

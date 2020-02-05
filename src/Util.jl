@@ -165,7 +165,7 @@ end
 function concat(xs::Vector{String})::String
 	ret = ""
 	for x in xs
-		ret = string(ret, x)
+		ret = ret * x
 	end
 	return ret
 end
@@ -193,8 +193,8 @@ function unSplit(xs::Vector{String}, c::Char)::String
 	else
 		ret = xs[1]
 		for x in xs[2:end]
-			ret = string(ret, c)
-			ret = string(ret, x)
+			ret = ret * c
+			ret = ret * x
 		end
 		return ret
 	end
