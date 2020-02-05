@@ -67,13 +67,13 @@ using TicTacToe
 	b[1][1] = 2
 	@test a == [1]
 	@test b == [[2], [1], [1]]
-	@test concat([]::Array{Array{Int}}) == []::Array{Int}
+	@test concat(Vector{Int}[]) == Int[]
 	@test concat([[1, 2, 3], [4, 5, 6]]) == [1, 2, 3, 4, 5, 6]
-	@test concat([]::Array{String}) == ""
+	@test concat(String[]) == ""
 	@test concat(["abc", "def"]) == "abcdef"
-	@test_throws DomainError unSplit([], 7)
+	@test_throws DomainError unSplit(Vector{Int}[], 7)
 	@test unSplit([[1, 2, 3], [4, 5, 6]], 7) == [1, 2, 3, 7, 4, 5, 6]
-	@test_throws DomainError unSplit([], '.')
+	@test_throws DomainError unSplit(String[], '.')
 	@test unSplit(["abc", "def"], '.') == "abc.def"
 end
 

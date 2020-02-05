@@ -153,8 +153,8 @@ function replicate(x::T, n::Integer)::Array{T} where T
 end
 
 # Concatenate array of arrays together.
-function concat(xs::Array{Array{T}})::Array{T} where T
-	ret = []
+function concat(xs::Vector{Vector{T}})::Vector{T} where T
+	ret = T[]
 	for x in xs
 		ret = vcat(ret, x)
 	end
@@ -162,7 +162,7 @@ function concat(xs::Array{Array{T}})::Array{T} where T
 end
 
 # Concatenate array of strings together.
-function concat(xs::Array{String})::String
+function concat(xs::Vector{String})::String
 	ret = ""
 	for x in xs
 		ret = string(ret, x)
@@ -172,7 +172,7 @@ end
 
 # Combine array of arrays by interspersing an element in between.
 # Throw DomainError if array is empty.
-function unSplit(xs::Array{Array{T}}, c::T)::Array{T} where T
+function unSplit(xs::Vector{Vector{T}}, c::T)::Vector{T} where T
 	if length(xs) == 0
 		throw(DomainError(xs, "Empty array."))
 	else
@@ -187,7 +187,7 @@ end
 
 # Combine array of strings by interspersing a char in between.
 # Throw DomainError if array is empty.
-function unSplit(xs::Array{String}, c::Char)::String
+function unSplit(xs::Vector{String}, c::Char)::String
 	if length(xs) == 0
 		throw(DomainError(xs, "Empty array."))
 	else
