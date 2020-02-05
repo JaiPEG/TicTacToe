@@ -16,7 +16,7 @@ const PositionState = Union{Player, Nothing}
 export Board
 # Must be an array of length 9
 # Starts at the top-left and goes across the rows
-const Board = Array{PositionState}
+const Board = Vector{PositionState}
 
 export State
 # State of a tic-tac-toe game
@@ -133,7 +133,7 @@ export childrenMoves
 # These are unique identifiers for the children of a node in such a DAG.
 #
 # See also: children.
-function childrenMoves(state::State)::Array{Move}
+function childrenMoves(state::State)::Vector{Move}
 	boardF(pos) = state.board[pos]
 	nextPositions = fiber(boardF, [1,2,3,4,5,6,7,8,9], nothing)
 	nextMoves = map(pos -> Move(pos, state.player),
@@ -147,7 +147,7 @@ export children
 # These are the children of a node in such a DAG.
 #
 # See also: childrenMoves.
-function children(state::State)::Array{State}
+function children(state::State)::Vector{State}
 	nextMoves = childrenMoves(state)
 	# Assuming moves are valid, join should never fail.
 	return map(move -> join(state, move), nextMoves)
@@ -184,7 +184,7 @@ export minimaxMoves
 # TODO: alpha-beta pruning.
 #
 # See also: minimax.
-function minimaxMoves(state::State)::Tuple{Real, Array{Move}}
+function minimaxMoves(state::State)::Tuple{Real, Vector{Move}}
 	u = utility(state)
 	# If terminal state
 	if u != nothing
