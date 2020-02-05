@@ -1,4 +1,4 @@
 name = "TicTacToe"
 uuid = "a08c4806-650f-4fc4-b3b8-186da5a54e48"
 authors = ["Cristian Ardelean <cristian97.ardelean@gmail.com>"]
-version = "0.2.0"
+version = "0.2.1"
