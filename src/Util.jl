@@ -22,7 +22,7 @@ end
 # If the array is empty, throw a DomainError.
 function fold1(f, xs::Vector{A}) where A
 	if length(xs) == 0
-		throw(DomainError(xs, "List must be nonempty."))
+		throw(DomainError(xs, "Vector must be nonempty."))
 	elseif length(xs) == 1
 		return xs[1]
 	else
