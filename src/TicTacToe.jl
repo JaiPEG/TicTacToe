@@ -214,7 +214,6 @@ end
 
 export showBoard
 function showBoard(board::Board)::String
-	ret = ""
 	function showPos(p)
 		if board[p] == X
 			return "X"
@@ -229,7 +228,6 @@ function showBoard(board::Board)::String
 		unSplit(map(showPos, [4, 5, 6]), '|'),
 		unSplit(map(showPos, [7, 8, 9]), '|'),
 	], '\n')
-	return ret
 end
 
 export showState
